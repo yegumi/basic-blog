@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container container-main">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="text-center mb-4">Welcome to My Website</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Your Message -->
+                        <p class="lead">
+                            Hello guys, it's yegumi, and this is my first experience with the Django framework.
+                            There's a lot that has to get fixed, but for now, I'm gonna leave this project behind for now.
+                            For learning new features of this amazing framework, I'm gonna work on a project with better and much creative ideas...
+                            Have a good day!
+                        </p>
+
+                        <!-- Add a Picture -->
+                        <div class="mt-4">
+                            <img src="{% static 'home/images/img.png' %}" alt="My Picture" class="img-fluid rounded">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+    <a href="{% url  'accounts:urprofile' post.user.id %}">{{post.user.username}}</a>
+     <p>{{post.updated|date:'Y-m (M)'}}</p>
+     <p>{{post.body}}</p>
+
+    {%if post.user.id == request.user.id %}
+          <a class="btn btn-danger" href="{% url 'home:delete_post' post.id %}">delete post</a>
+          <a class="btn btn-primary" href="{% url 'home:update_post' post.id %}">update post</a>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+        <a class='btn btn-info col-md-2 {%if can_like %}disabled{% endif %}'href="{% url 'home:like' user.id post.id %}">LIKE ({{post.Likes_count}})</a>
+        <form action="" method="post" novalidate>
+            {% csrf_token %}
+            {{form}}
+            <input class="mt-3" type="submit" value="upload">
+        </form><hr>
+    {% else %}
+        <p class="alert alert-danger"> you  are not authenticated to comment </p>
+    {% endif %}
+    <h3 class="text-center">  TOTAL COMMENTS: {{comments.count}}</h3>
+    {% for comment in comments%}
+        <div class="card bg-dark text-white mt-2 p-3">
+            <p class="card-header">{{comment.user}} | {{comment.created|timesince}}</p>
+            <p class="card-body">{{ comment.user }}</p>
+            {% if request.user.is_authenticated %}
+                <form action="{% url 'home:reply_comment' post.id comment.id %}" method="post" novalidate>
+                    {% csrf_token %}
+                    {{rep}}
+                    <input class="mt-3" type="submit" value="answer the comment">
+                </form><hr>
+            {% else %}
+                    <p class="alert alert-danger"> u r not authenticated to reply on comment </p>
+            {% endif %}
+            {% with replies=comment.rcomments.all|dictsort:'created'%}
+            {% for reply in replies  %}
+                <p class="card-header bg-light p-3 text-dark">{{reply.user}} | {{reply.created|timesince}}</p>
+                <p class="=card-body bg-light p-3 text-dark ">{{reply.body}}</p>
+            {% endfor %}
+            {% endwith %}
+        </div>
+    {% empty %}
+        <p> Be the first person to comment on this post</p>
+    {% endfor %}
+
+{% endblock %}
